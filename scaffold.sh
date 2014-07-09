@@ -1,6 +1,6 @@
 #!/bin/bash
 
-APPNAME=${1:-skeletonapp}
+read -p "App name: " APPNAME </dev/tty
 export APPNAME
 
 TEMP=$(mktemp -d -t python-flask-scaffold-XXXXXX) 
