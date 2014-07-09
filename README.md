@@ -10,3 +10,10 @@ To create a new app (it will ask you ffor options, like app name):
 
 
 The script is self-documenting and will tell you what to do next.
+
+# TODO
+
+Ask for more options:
+ - has database?
+ - has frontend? (use GDS frontend-toolkit for this)
+ - etc
