@@ -1,13 +1,20 @@
 #!/bin/bash
+set -e
+
+FLASK_EXAMPLE=flask-examples
 
 read -p "App name: " APPNAME </dev/tty
 export APPNAME
 
 TEMP=$(mktemp -d -t python-flask-scaffold-XXXXXX) 
-curl -L https://github.com/LandRegistry/flask-examples/archive/master.zip -o $TEMP/master.zip
-unzip $TEMP/master -d $TEMP
+git clone https://github.com/LandRegistry/$FLASK_EXAMPLE  $TEMP/$FLASK_EXAMPLE
 
-mv $TEMP/flask-examples-master $APPNAME
+cd $TEMP/$FLASK_EXAMPLE
+git submodule init
+git submodule update
+
+cd -
+mv $TEMP/$FLASK_EXAMPLE $APPNAME
 
 echo "Renaming the application proper"
 mv $APPNAME/appname $APPNAME/$APPNAME
