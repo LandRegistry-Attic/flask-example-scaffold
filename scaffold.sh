@@ -1,36 +1,65 @@
 #!/bin/bash
 set -e
 
-FLASK_EXAMPLE=flask-examples
+export FLASK_EXAMPLE=flask-examples
+export WORKSPACE=$(pwd)
 
 read -p "App name: " APPNAME </dev/tty
 export APPNAME
 
-TEMP=$(mktemp -d -t python-flask-scaffold-XXXXXX) 
-git clone https://github.com/LandRegistry/$FLASK_EXAMPLE  $TEMP/$FLASK_EXAMPLE
+read -p "Frontend toolkit? (y/n) " HAS_TOOLKIT </dev/tty
+export HAS_TOOLKIT
 
-cd $TEMP/$FLASK_EXAMPLE
-git submodule init
-git submodule update
+export TEMP=$(mktemp -d -t python-flask-scaffold-XXXXXX) 
 
-cd -
-mv $TEMP/$FLASK_EXAMPLE $APPNAME
+curl -L https://github.com/LandRegistry/flask-examples/archive/master.zip -o $TEMP/master.zip
+unzip $TEMP/master -d $TEMP
+mv $TEMP/flask-examples-master $WORKSPACE/$APPNAME
 
 echo "Renaming the application proper"
-mv $APPNAME/appname $APPNAME/$APPNAME
+# app name proper is same as project name
+mv $WORKSPACE/$APPNAME/appname $WORKSPACE/$APPNAME/$APPNAME
 
-for f in $(find $APPNAME -type f) ; do
+cd $WORKSPACE/$APPNAME
+rm README.md
+echo "# $APPNAME" > README.md
+echo "This app was created using the scaffolder at https://github.com/LandRegistry/flask-example-scaffold" >> README.md
+git init
+git add -A .
+git commit -m "scaffold: init"
+cd $WORKSPACE
+
+if [ "$HAS_TOOLKIT" == "y" ] ; then
+  rm -rf $WORKSPACE/$APPNAME/$APPNAME/static/govuk_toolkit 
+  cd $WORKSPACE/$APPNAME
+  git submodule add https://github.com/alphagov/govuk_frontend_toolkit.git $APPNAME/static/govuk_toolkit
+  git add -A .
+  git commit -m "scaffold: add frontend toolkit"
+  cd $WORKSPACE
+fi
+
+for f in $(find $WORKSPACE/$APPNAME -type f) ; do
   perl -pi -e 's/appname/$ENV{APPNAME}/g' $f
 done
 
-echo "Done. App at $(pwd)/$APPNAME"
-echo
-echo ">> TODO"
-echo
-echo "cd $APPNAME"
-echo "virtualenv .virtualenv"
-echo "source .virtualenv/bin/activate"
-echo "pip install -r requirements.txt"
-echo "./run.sh"
+cd $WORKSPACE/$APPNAME
+git add -A .
+git commit -m "scaffold: rename app proper"
+cd $WORKSPACE
+
+cat <<EOF
+Done. App at $WORKSPACE/$APPNAME
+
+>> TODO
+
+cd $WORKSPACE/$APPNAME
+git status
+# git add / git commit / etc
+# git remote add origin git@your-remote.com/$APPNAME.git
+virtualenv .virtualenv
+source .virtualenv/bin/activate
+pip install -r requirements.txt
+./run.sh
+EOF
 
 rm -rf $TEMP

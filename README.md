@@ -6,8 +6,11 @@ Scaffolds Python Flask [skeleton app]().
 
 To create a new app (it will ask you ffor options, like app name):
 
-    curl -L http://bit.ly/lr-scaffold | sh
+    curl -L https://raw.githubusercontent.com/LandRegistry/flask-example-scaffold/master/scaffold.sh | bash
 
+Sometimes Github caches stuff, even if changes were pushed, so bust it with ```?$(date +%s)```:
+
+    curl -L "https://raw.githubusercontent.com/LandRegistry/flask-example-scaffold/master/scaffold.sh?$(date +%s)" | bash
 
 The script is self-documenting and will tell you what to do next.
 
