@@ -49,17 +49,6 @@ cd $WORKSPACE
 
 cat <<EOF
 Done. App at $WORKSPACE/$APPNAME
-
->> TODO
-
-cd $WORKSPACE/$APPNAME
-git status
-# git add / git commit / etc
-# git remote add origin git@your-remote.com/$APPNAME.git
-virtualenv .virtualenv
-source .virtualenv/bin/activate
-pip install -r requirements.txt
-./run.sh
 EOF
 
 rm -rf $TEMP
