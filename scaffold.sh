@@ -4,7 +4,7 @@ set -e
 export FLASK_EXAMPLE=flask-examples
 export WORKSPACE=$(pwd)
 
-read -p "App name: " APPNAME </dev/tty
+read -p "App name (alphanumeric and underscores only!): " APPNAME </dev/tty
 export APPNAME
 
 read -p "Frontend toolkit? (y/n) " HAS_TOOLKIT </dev/tty
